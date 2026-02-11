@@ -81,6 +81,7 @@ namespace Module_9_Практикум_App
                 catch (MyException e)
                 {
                     Console.WriteLine(e.Message);
+                    condition = false;
                 }
                 catch (Exception)
                 {
