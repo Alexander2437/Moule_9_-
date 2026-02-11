@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Moule_9_Практикум_App
+﻿namespace Moule_9_Практикум_App
 {
+
     public class SortHelper
     {
         public delegate void SortEventHandler(List<string> surnames, bool ascending);
-        public event SortEventHandler SortEvent;
+        public event SortEventHandler? SortEvent;
 
-        public void TriggerSort(List<string> sernames, bool ascending)
+        /// <summary>
+        /// Метод для сортировки массива.
+        /// </summary>
+        /// <param name="surnames">Принимает список фамилий.</param>
+        /// <param name="ascending">Принцип сортировки</param>
+        public void TriggerSort(List<string> surnames, bool ascending)
         {
-            SortEvent?.Invoke(sernames, ascending);
+            SortEvent?.Invoke(surnames, ascending);
         }
     }
 }

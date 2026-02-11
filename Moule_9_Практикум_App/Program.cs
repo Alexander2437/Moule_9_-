@@ -1,7 +1,4 @@
 ﻿using Moule_9_Практикум_App;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Module_9_Практикум_App
 {
@@ -11,11 +8,13 @@ namespace Module_9_Практикум_App
         {
             // Задание 1
 
+
+
             //Exception[] exceptions = new Exception[]
             //{
             //    new ArgumentNullException("param", "Аргумент не может быть null"),
             //    new InvalidOperationException("Неверная операция"),
-            //    new NewException("Мое собственное исключение"),
+            //    new MyException("Некорректный параметр сортировки."),
             //    new DivideByZeroException("Деление на ноль"),
             //    new FormatException("Неверный формат")
             //};
@@ -26,68 +25,86 @@ namespace Module_9_Практикум_App
             //    {
             //        throw ex;
             //    }
-            //    catch (Exception e)
+            //    catch (Exception exception)
             //    {
-            //        Console.WriteLine("Поймано исключение: " + e.Message);
+            //        Console.WriteLine("Поймано исключение: " + exception.Message);
+            //    }
+            //    finally
+            //    {
+            //        Console.WriteLine($"Итерация с исключением {ex} завершена.");
             //    }
             //}
 
-            // Задание 2
 
-            List<string> surnames = new List<string>() { "Иванов", "Смирнов", "Петров", "Дуров", "Юсупов"};
 
-            Console.WriteLine("Начальный список фамилий:");
-            PrintList(surnames);
+            //Задание 2
+
+
+
+            List<string> surnames = new List<string>() { "Иванов", "Смирнов", "Петров", "Дуров", "Юсупов" };
 
             SortHelper sorter = new SortHelper();
-            sorter.SortEvent += (list, asc) =>
+            sorter.SortEvent += delegate (List<string> surnames, bool ascending)
             {
-                if (asc)
+                if (ascending)
                 {
-                    list.Sort();
+                    surnames.Sort();
                 }
                 else
                 {
-                    list.Sort();
-                    list.Reverse();
+                    surnames.Sort();
+                    surnames.Reverse();
                 }
             };
 
-            bool condition;
+            byte numeric = 0;
+            bool condition = false;
+
             do
             {
-                Console.WriteLine("Введите цифрами \"1\" для сортировки списка от А до Я или \"2\" для сортировки от Я до А.");
-                string input = Console.ReadLine();
+                Console.WriteLine("Укажите порядок сортировки: 1 - в алфавитном порядке, 2 - в обратном порядке.");
+                var sortBy = Console.ReadLine();
 
-                if (input == "1")
+                try
                 {
-                    sorter.TriggerSort(surnames, true);
-                    Console.WriteLine("Cписок отсортирован от А до Я.");
-                    PrintList(surnames);
-                    condition = true;
+                    numeric = byte.Parse(sortBy);
+                    if (numeric == 1 || numeric == 2)
+                    {
+                        condition = true;
+                    }
+                    else
+                    {
+                        condition = false;
+                        throw new MyException("Некорректный порядок сортировки.");
+                    }
                 }
-                else if (input == "2")
+                catch (MyException e)
                 {
-                    sorter.TriggerSort(surnames, false);
-                    Console.WriteLine("Cписок отсортирован от Я до А.");
-                    PrintList(surnames);
-                    condition = true;
+                    Console.WriteLine(e.Message);
                 }
-                else
+                catch (Exception)
                 {
+                    Console.WriteLine("Некорректный порядок сортировки.");
                     condition = false;
-                    continue;
                 }
-            }while (condition == false);
-        }
+            }
+            while (condition == false);
 
-        public static void PrintList(List<string> surnameList)
-        {
-            foreach (string surname in surnameList)
+            switch (numeric)
             {
-                {
-                    Console.WriteLine(surname);
-                }
+                case 1:
+                    sorter.TriggerSort(surnames, true);
+                    condition = true;
+                    break;
+                case 2:
+                    sorter.TriggerSort(surnames, false);
+                    condition = true;
+                    break;
+            }
+
+            foreach (var name in surnames)
+            {
+                Console.WriteLine(name);
             }
         }
     }
